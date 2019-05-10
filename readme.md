@@ -21,6 +21,9 @@ Some additional info:
 * User data is stored in redis
 
 
+submission: 
+* Please submit a git patch file with your changes, to allow for easy comparison. 
+
 Feel free to make any changes in current code, while keeping it's external APIs & expected behaviour.
 If you find some issues with current impl, please state them, and how you would correct them.
 
