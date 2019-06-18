@@ -8,7 +8,7 @@ public class LatestUserCachedInfoImpl implements LatestUserCachedInfo {
     long lastInitTime = (new Date()).getTime();
     final long MAX_CAPACITY = 10000;
     final float REMOVE_AFTER_CLEANING_INDEX = 0.4F;
-    final long LATENCY_MSEC = 1000 * 10;
+    final long LATENCY_MSEC = 1000 * 60 * 5;
 
     Map<String, Long> whiteList = new HashMap<>();
     Map<String, Long> blackList = new HashMap<>();
