@@ -8,16 +8,16 @@ public class LatestUserCachedInfoImpl implements LatestUserCachedInfo {
     long lastInitTime = (new Date()).getTime();
     final long MAX_CAPACITY = 10000;
     final float REMOVE_AFTER_CLEANING_INDEX = 0.4F;
+    final long LATENCY_MSEC = 1000 * 10;
 
     Map<String, Long> whiteList = new HashMap<>();
     Map<String, Long> blackList = new HashMap<>();
 
     public Boolean isInBlackList(String key) {
+        checkAndFixCapacityOverhead();
         if(whiteList.containsKey(key)){
-            whiteList.put(key, (new Date()).getTime());
             return false;
         }else if(blackList.containsKey(key)) {
-            blackList.put(key, (new Date()).getTime());
             return true;
         }else{
             return null;
@@ -35,11 +35,18 @@ public class LatestUserCachedInfoImpl implements LatestUserCachedInfo {
     }
 
     private void checkAndFixCapacityOverhead(){
+        long currentTime = (new Date()).getTime();
         if((whiteList.size() + blackList.size()) > MAX_CAPACITY){
-            long currentTime = (new Date()).getTime();
-            long thTime = currentTime - Math.round((currentTime - lastInitTime) * REMOVE_AFTER_CLEANING_INDEX);
-            whiteList.values().removeIf(value -> value < thTime);
-            blackList.values().removeIf(value -> value < thTime);
+            filterByTH(currentTime - Math.round((currentTime - lastInitTime) * REMOVE_AFTER_CLEANING_INDEX));
+        }else if((currentTime - lastInitTime) > LATENCY_MSEC){
+            filterByTH(currentTime - LATENCY_MSEC);
         }
+    }
+
+    private void filterByTH(long thTime){
+        whiteList.values().removeIf(value -> value < thTime);
+        blackList.values().removeIf(value -> value < thTime);
+
+        lastInitTime = (new Date()).getTime();
     }
 }
