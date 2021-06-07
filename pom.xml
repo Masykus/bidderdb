@@ -67,7 +67,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <!-- DO NOT change this version. Jetty using the same version, so we don't want dependency problems-->
-            <version>1.0.7</version>
+            <version>1.2.0</version>
         </dependency>
 
     </dependencies>
